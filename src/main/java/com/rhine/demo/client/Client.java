@@ -1,12 +1,9 @@
 package com.rhine.demo.client;
 
-import cn.hutool.core.util.HexUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.asymmetric.KeyType;
-import cn.hutool.crypto.asymmetric.RSA;
 import com.alibaba.fastjson.JSON;
 import com.rhine.demo.server.Server;
-import com.rhine.demo.utils.AES;
+import com.rhine.demo.utils.AESUtil;
+import com.rhine.demo.utils.RSAUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,15 +37,11 @@ public class Client {
         this.AESKey = getRandomString(16);
 
         // 加密AESKey为RSAkey
-        RSA rsa = new RSA(null, pubKey);
-        byte[] encrypt = rsa.encrypt(StrUtil.bytes(AESKey), KeyType.PublicKey);
-        // 这里将byte转换为十六进制
-        String RSAKey = HexUtil.encodeHexStr(encrypt);
-
-        // 使用AESKey加密数据
+        String RSAKey = RSAUtil.encrypt(this.AESKey, this.pubKey);
+        // 使用AESKey加密data
         String data = "hello server";
-        System.out.println("明文数据："+data);
-        String encryptedData = AES.encrypt(AESKey, data);
+        System.out.println("明文数据：" + data);
+        String encryptedData = AESUtil.encrypt(AESKey, data);
 
         // 封装数据
         Map<String, String> map = new HashMap<>();
@@ -61,10 +54,10 @@ public class Client {
      * 第三步 发送数据
      **/
     public void send(String encryptData) {
-        System.out.println("客户端实际发送数据："+encryptData);
+        System.out.println("客户端实际发送数据：" + encryptData);
         String response = server.handler(encryptData);
-        String data = AES.dncrypt(AESKey, response);
-        System.out.println("客户端解密响应数据："+data);
+        String data = AESUtil.dncrypt(AESKey, response);
+        System.out.println("客户端解密响应数据：" + data);
     }
 
     /**

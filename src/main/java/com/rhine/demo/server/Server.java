@@ -1,12 +1,10 @@
 package com.rhine.demo.server;
 
-import cn.hutool.core.util.HexUtil;
-import cn.hutool.crypto.asymmetric.KeyType;
-import cn.hutool.crypto.asymmetric.RSA;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rhine.demo.Redis.Redis;
-import com.rhine.demo.utils.AES;
+import com.rhine.demo.utils.AESUtil;
+import com.rhine.demo.utils.RSAUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,11 +27,11 @@ public class Server {
      **/
     public String getPubKey() {
         // 生成公钥与私钥
-        RSA rsa = new RSA();
+        String[] keyPair = RSAUtil.generateKeyPair();
         // 存储到Redis中
-        redis.set("pvtKey", rsa.getPrivateKeyBase64());
-        redis.set("pubKey", rsa.getPublicKeyBase64());
-        return rsa.getPublicKeyBase64();
+        redis.set("pubKey", keyPair[0]);
+        redis.set("pvtKey", keyPair[1]);
+        return keyPair[0];
     }
 
     /**
@@ -43,25 +41,23 @@ public class Server {
         // 解析参数
         JSONObject jsonObj = JSON.parseObject(encryptData);
         String RSAKey = jsonObj.getString("key");
-        String encryptedData =  jsonObj.getString("value");
+        String encryptedData = jsonObj.getString("value");
 
-        // 解密RSAKey得到AESKey，解密encryptedData得到data
         String pvtKey = redis.get("pvtKey");
-        RSA rsa = new RSA(pvtKey, null);
-        byte[] decrypt = rsa.decrypt(HexUtil.decodeHex(RSAKey), KeyType.PrivateKey);
-        this.AESKey = new String(decrypt);
-        String data = AES.dncrypt(AESKey, encryptedData);
-        System.out.println("服务端解密数据："+data);
+        // 解密RSAKey得到AESKey
+        this.AESKey = RSAUtil.dncrypt(RSAKey, pvtKey);
+        // 解密encryptedData得到data
+        String data = AESUtil.dncrypt(AESKey, encryptedData);
+        System.out.println("服务端解密数据：" + data);
 
         // 封装响应数据
         Map<String, String> map = new HashMap<>();
         map.put("msg", "hi client");
         map.put("code", "200");
-        String encryptedResponse = AES.encrypt(AESKey, JSON.toJSONString(map));
-        System.out.println("服务端响应数据："+encryptedResponse);
+        String encryptedResponse = AESUtil.encrypt(AESKey, JSON.toJSONString(map));
+        System.out.println("服务端响应数据：" + encryptedResponse);
 
         // 响应
         return encryptedResponse;
     }
-
 }

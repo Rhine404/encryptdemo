@@ -10,7 +10,7 @@ import cn.hutool.crypto.symmetric.SymmetricCrypto;
  * @Description TODO
  * @Date Created in 15:52 2019/6/11
  */
-public class AES {
+public class AESUtil {
 
     public static String encrypt(String key, String content) {
         byte[] aesKey = SecureUtil.generateKey(SymmetricAlgorithm.AES.getValue(), key.getBytes()).getEncoded();
