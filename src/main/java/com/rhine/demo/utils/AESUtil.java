@@ -6,9 +6,7 @@ import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
 
 /**
- * @Author rhine
- * @Description TODO
- * @Date Created in 15:52 2019/6/11
+ * AES加解密工具类：封装Hutool的AES工具类
  */
 public class AESUtil {
 

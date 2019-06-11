@@ -5,9 +5,7 @@ import com.rhine.demo.client.Client;
 import com.rhine.demo.server.Server;
 
 /**
- * @Author rhine
- * @Description TODO
- * @Date Created in 15:13 2019/6/11
+ * ∆Ù∂Ø¿‡
  */
 public class Main {
     public static void main(String[] args) {
