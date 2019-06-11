@@ -2,7 +2,7 @@ package com.rhine.demo.server;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.rhine.demo.Redis.Redis;
+import com.rhine.demo.redis.Redis;
 import com.rhine.demo.utils.AESUtil;
 import com.rhine.demo.utils.RSAUtil;
 

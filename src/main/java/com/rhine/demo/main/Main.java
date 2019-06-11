@@ -1,6 +1,6 @@
 package com.rhine.demo.main;
 
-import com.rhine.demo.Redis.Redis;
+import com.rhine.demo.redis.Redis;
 import com.rhine.demo.client.Client;
 import com.rhine.demo.server.Server;
 

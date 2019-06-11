@@ -1,4 +1,4 @@
-package com.rhine.demo.Redis;
+package com.rhine.demo.redis;
 
 import java.util.HashMap;
 import java.util.Map;
